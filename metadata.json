@@ -1,0 +1,6 @@
+{
+  "name": "Steel Tray",
+  "description": "Coastal Karnataka tiffin ordering cart with interactive steel tray plate-building, combo builder, and pickup slot reservation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

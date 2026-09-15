@@ -1,0 +1,224 @@
+@import "tailwindcss";
+
+:root {
+  /* Warm cream counter palette */
+  --coconut: #FDF8ED;
+  --coconut-card: #FFFFFF;
+  --coconut-surface: #F7F1E5;
+  --coconut-border: #E8DDCF;
+  --coconut-border-dark: #D4C5B0;
+  
+  /* Dark filter-coffee brown typography */
+  --coffee: #2C1810;
+  --coffee-deep: #1E0F0A;
+  --coffee-muted: #665044;
+  --coffee-faint: #8E786B;
+  
+  /* Terracotta / Clay primary action accent */
+  --clay: #B5562D;
+  --clay-hover: #9E4520;
+  --clay-active: #8A3B19;
+  --clay-light: #FBF0EB;
+  --clay-border: #E8A88B;
+  
+  /* Banana-leaf green secondary badges */
+  --leaf-bg: #EDF5EB;
+  --leaf-text: #295A24;
+  --leaf-border: #C6DEC2;
+  
+  /* Tray physical plate materials */
+  --banana-leaf: #264E22;
+  --banana-leaf-vein: #1C3B19;
+  --turmeric: #D98200;
+  
+  /* Thermal POS printer chit */
+  --thermal-paper: #F6F3EC;
+  --thermal-ink: #1B130E;
+}
+
+body {
+  font-family: 'Inter Tight', system-ui, -apple-system, sans-serif;
+  color: var(--coffee);
+  background-color: var(--coconut);
+  background-image: 
+    /* Gentle overhead ambient warmth */
+    radial-gradient(ellipse 80% 50% at 50% -5%, rgba(220, 160, 90, 0.12) 0%, transparent 60%),
+    /* Soft corner warmth */
+    radial-gradient(circle at 100% 100%, rgba(181, 86, 45, 0.05) 0%, transparent 40%),
+    /* Cream paper-to-stone depth */
+    linear-gradient(180deg, #FDF8ED 0%, #F9F3E6 50%, #F5EDE0 100%);
+  background-attachment: fixed;
+}
+
+/* Authentic Signboard & Display Typography */
+.font-udupi-display {
+  font-family: 'Syne', -apple-system, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.font-mono-chit {
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* Brushed stainless steel platter texture */
+.bg-brushed-steel {
+  background: linear-gradient(
+    135deg,
+    #CCD5D9 0%,
+    #A8B2B7 22%,
+    #DCE3E6 42%,
+    #BCC5C8 60%,
+    #98A2A8 82%,
+    #CFD7DA 100%
+  );
+  box-shadow: 
+    inset 0 2px 4px rgba(255, 255, 255, 0.85),
+    inset 0 -3px 5px rgba(20, 26, 30, 0.4),
+    0 16px 36px -8px rgba(44, 24, 16, 0.22),
+    0 4px 12px rgba(44, 24, 16, 0.12);
+}
+
+/* Heavy pressed steel rim */
+.steel-tray-rim {
+  border: 4px solid #CAD2D6;
+  box-shadow: 
+    inset 0 1px 3px rgba(255, 255, 255, 0.95),
+    inset 0 -3px 4px rgba(0, 0, 0, 0.35);
+}
+
+/* Circular pressed katori well (deep pressed metal bowl depression) */
+.katori-well {
+  background: radial-gradient(circle at 35% 30%, #D8E0E3 0%, #B0BABC 50%, #8E989E 100%);
+  box-shadow: 
+    inset 2px 3px 6px rgba(10, 15, 20, 0.55),
+    inset -2px -2px 5px rgba(255, 255, 255, 0.55),
+    0 2px 4px rgba(0, 0, 0, 0.18);
+  border: 3px solid #C0C8CC;
+}
+
+/* Tumbler dock station (circular debossed docking slot) */
+.tumbler-dock-well {
+  background: radial-gradient(circle at 40% 35%, #DCE3E6 0%, #ABB5BA 55%, #889399 100%);
+  box-shadow: 
+    inset 3px 4px 7px rgba(10, 15, 20, 0.6),
+    inset -2px -2px 5px rgba(255, 255, 255, 0.6),
+    0 2px 4px rgba(0, 0, 0, 0.18);
+  border: 3px solid #C4CCD0;
+}
+
+/* Banana leaf texture with distinct botanical veins */
+.bg-banana-leaf-texture {
+  background-color: var(--banana-leaf);
+  background-image: 
+    repeating-linear-gradient(
+      98deg,
+      rgba(255, 255, 255, 0.05) 0px,
+      rgba(255, 255, 255, 0.05) 1px,
+      transparent 1px,
+      transparent 12px
+    ),
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.15) 0%,
+      rgba(0, 0, 0, 0) 40%,
+      rgba(0, 0, 0, 0.2) 100%
+    );
+}
+
+/* Tactile Cream/Stone Pressed Metal Button */
+.btn-steel-press {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F5ECE0 100%);
+  border-top: 1px solid #FFFFFF;
+  border-left: 1px solid #E4D7C7;
+  border-right: 1px solid #E4D7C7;
+  border-bottom: 2px solid #CBBCA8;
+  color: #2C1810;
+  box-shadow: 0 1px 3px rgba(44, 24, 16, 0.08);
+  transition: all 0.1s ease;
+}
+
+.btn-steel-press:hover {
+  background: linear-gradient(180deg, #FFFDF9 0%, #EFE4D4 100%);
+  border-bottom-color: #B8A590;
+  color: #1E0F0A;
+}
+
+.btn-steel-press:active {
+  transform: translateY(1px);
+  background: linear-gradient(180deg, #EFE2D2 0%, #F5ECE0 100%);
+  border-top: 1px solid #D5C6B2;
+  border-bottom: 1px solid #EFE2D2;
+  box-shadow: inset 0 1px 2px rgba(44, 24, 16, 0.12);
+}
+
+/* Primary Terracotta Clay CTA Button */
+.btn-sambar-cta {
+  background: linear-gradient(180deg, #C45F34 0%, #B5562D 100%);
+  border-top: 1px solid #E0825B;
+  border-left: 1px solid #B5562D;
+  border-right: 1px solid #B5562D;
+  border-bottom: 2px solid #7E3314;
+  color: #FFFFFF;
+  box-shadow: 0 3px 8px rgba(181, 86, 45, 0.35);
+  transition: all 0.12s ease;
+}
+
+.btn-sambar-cta:hover {
+  background: linear-gradient(180deg, #CF673A 0%, #BF5A30 100%);
+  box-shadow: 0 4px 12px rgba(181, 86, 45, 0.45);
+}
+
+.btn-sambar-cta:active {
+  transform: translateY(1px);
+  background: linear-gradient(180deg, #9C4520 0%, #B5562D 100%);
+  border-top: 1px solid #7E3314;
+  border-bottom: 1px solid #E0825B;
+  box-shadow: inset 0 2px 4px rgba(44, 24, 16, 0.35);
+}
+
+/* Realistic serrated cut edge on thermal till paper */
+.thermal-serrated-top {
+  position: relative;
+}
+.thermal-serrated-top::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background-image: radial-gradient(circle, transparent 4px, var(--thermal-paper) 4.5px);
+  background-size: 12px 8px;
+  background-repeat: repeat-x;
+}
+
+.thermal-serrated-bottom {
+  position: relative;
+}
+.thermal-serrated-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background-image: radial-gradient(circle, var(--thermal-paper) 4px, transparent 4.5px);
+  background-size: 12px 8px;
+  background-repeat: repeat-x;
+}
+
+/* Industrial warm scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F4ECE0;
+}
+::-webkit-scrollbar-thumb {
+  background: #D5C6B2;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #B5562D;
+}
