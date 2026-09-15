@@ -362,7 +362,7 @@ export const SteelTrayGraphic: React.FC<SteelTrayGraphicProps> = ({
                 Fresh Banana Leaf Awaiting Orders
               </h3>
               <p className="text-xs text-[#BED8BA] max-w-xs leading-relaxed mb-4 font-mono-chit">
-                Cast-iron tawa is hot. Select crisp Goli Baje, lace-thin Neer Dosa, or build a Raja Combo from the counter menu.
+                Cast-iron tawa is hot. Select crisp Goli Baje, lace-thin Neer Dosa, or build a combo platter from the counter menu.
               </p>
 
               {onQuickAddFirst && (

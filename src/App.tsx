@@ -119,11 +119,13 @@ export default function App() {
   );
   const showSmartNudge = hasBaseTiffin && !nudgeDismissed && !lines.some(l => l.comboSelection);
 
-  // Trigger the deliberate "serve flight" moment
+  // Debounce guard to prevent accidental touch double-taps on the same item
+  const lastAddRef = useRef<{ id: string; time: number }>({ id: '', time: 0 });
+
+  // Trigger the visual "serve flight" moment
   const triggerServeFlight = (
     visualType: string,
-    eventTarget: HTMLElement | null,
-    onCompleteAdd: () => void
+    eventTarget: HTMLElement | null
   ) => {
     let startX = window.innerWidth / 2;
     let startY = window.innerHeight / 2;
@@ -143,83 +145,92 @@ export default function App() {
       targetY = trayRect.top + trayRect.height / 3;
     }
 
-    const flightId = `flight-${Date.now()}-${Math.random()}`;
+    const flightId = `flight-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
     const newFlight: ActiveFlight = {
       id: flightId,
       visualType,
       startX,
       startY,
       targetX,
-      targetY,
-      onComplete: () => {
-        onCompleteAdd();
-        setFlights(prev => prev.filter(f => f.id !== flightId));
-      }
+      targetY
     };
 
     setFlights(prev => [...prev, newFlight]);
   };
 
+  const handleFlightComplete = (flightId: string) => {
+    setFlights(prev => prev.filter(f => f.id !== flightId));
+  };
+
   // Add standard single item to tray
   const handleAddItem = (item: MenuItem, e?: React.MouseEvent) => {
-    const targetElement = (e?.currentTarget as HTMLElement) || null;
+    const now = Date.now();
+    // Prevent accidental micro double-clicks within 220ms on the exact same item
+    if (lastAddRef.current.id === item.id && now - lastAddRef.current.time < 220) {
+      return;
+    }
+    lastAddRef.current = { id: item.id, time: now };
 
-    triggerServeFlight(item.visualType, targetElement, () => {
-      setLines(prev => {
-        const existingIndex = prev.findIndex(l => l.itemId === item.id && !l.comboSelection);
-        if (existingIndex > -1) {
-          const updated = [...prev];
-          const curr = updated[existingIndex];
-          const newQty = curr.quantity + 1;
-          updated[existingIndex] = {
-            ...curr,
-            quantity: newQty,
-            lineTotal: newQty * curr.unitPrice
-          };
-          return updated;
-        }
-
-        const newLine: TrayLine = {
-          id: `line-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
-          itemId: item.id,
-          name: item.name,
-          kannadaName: item.kannadaName,
-          quantity: 1,
-          unitPrice: item.price,
-          lineTotal: item.price,
-          traySection: item.traySection,
-          visualType: item.visualType,
-          addedAt: Date.now()
+    // 1. Immediately update tray state (deterministic, single addition)
+    setLines(prev => {
+      const existingIndex = prev.findIndex(l => l.itemId === item.id && !l.comboSelection);
+      if (existingIndex > -1) {
+        const updated = [...prev];
+        const curr = updated[existingIndex];
+        const newQty = curr.quantity + 1;
+        updated[existingIndex] = {
+          ...curr,
+          quantity: newQty,
+          lineTotal: newQty * curr.unitPrice
         };
+        return updated;
+      }
 
-        return [...prev, newLine];
-      });
+      const newLine: TrayLine = {
+        id: `line-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+        itemId: item.id,
+        name: item.name,
+        kannadaName: item.kannadaName,
+        quantity: 1,
+        unitPrice: item.price,
+        lineTotal: item.price,
+        traySection: item.traySection,
+        visualType: item.visualType,
+        addedAt: Date.now()
+      };
+
+      return [...prev, newLine];
     });
+
+    // 2. Launch non-blocking visual flight
+    const targetElement = (e?.currentTarget as HTMLElement) || null;
+    triggerServeFlight(item.visualType, targetElement);
   };
 
   // Add customized combo to tray
   const handleAddCombo = (selection: ComboSelection, e?: React.MouseEvent) => {
     if (!comboItemToBuild) return;
+    const itemBeingBuilt = comboItemToBuild;
+
+    const newLine: TrayLine = {
+      id: `combo-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+      itemId: itemBeingBuilt.id,
+      name: `${itemBeingBuilt.name} (${selection.base.name.split(' ')[0]})`,
+      kannadaName: itemBeingBuilt.kannadaName,
+      quantity: 1,
+      unitPrice: selection.bundlePrice,
+      lineTotal: selection.bundlePrice,
+      traySection: itemBeingBuilt.traySection,
+      visualType: itemBeingBuilt.visualType,
+      comboSelection: selection,
+      addedAt: Date.now()
+    };
+
+    setLines(prev => [...prev, newLine]);
+    setComboItemToBuild(null);
+
     const targetElement = (e?.currentTarget as HTMLElement) || null;
-
-    triggerServeFlight(comboItemToBuild.visualType, targetElement, () => {
-      const newLine: TrayLine = {
-        id: `combo-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
-        itemId: comboItemToBuild.id,
-        name: `${comboItemToBuild.name} (${selection.base.name.split(' ')[0]})`,
-        kannadaName: comboItemToBuild.kannadaName,
-        quantity: 1,
-        unitPrice: selection.bundlePrice,
-        lineTotal: selection.bundlePrice,
-        traySection: comboItemToBuild.traySection,
-        visualType: comboItemToBuild.visualType,
-        comboSelection: selection,
-        addedAt: Date.now()
-      };
-
-      setLines(prev => [...prev, newLine]);
-      setComboItemToBuild(null);
-    });
+    triggerServeFlight(itemBeingBuilt.visualType, targetElement);
   };
 
   // Update line quantity
@@ -249,22 +260,21 @@ export default function App() {
   const handleQuickAddFirst = () => {
     const neerDosa = MENU_ITEMS.find(i => i.id === 'neer-dosa');
     if (neerDosa) {
-      triggerServeFlight(neerDosa.visualType, null, () => {
-        setLines([
-          {
-            id: `line-${Date.now()}`,
-            itemId: neerDosa.id,
-            name: neerDosa.name,
-            kannadaName: neerDosa.kannadaName,
-            quantity: 1,
-            unitPrice: neerDosa.price,
-            lineTotal: neerDosa.price,
-            traySection: neerDosa.traySection,
-            visualType: neerDosa.visualType,
-            addedAt: Date.now()
-          }
-        ]);
-      });
+      setLines([
+        {
+          id: `line-${Date.now()}`,
+          itemId: neerDosa.id,
+          name: neerDosa.name,
+          kannadaName: neerDosa.kannadaName,
+          quantity: 1,
+          unitPrice: neerDosa.price,
+          lineTotal: neerDosa.price,
+          traySection: neerDosa.traySection,
+          visualType: neerDosa.visualType,
+          addedAt: Date.now()
+        }
+      ]);
+      triggerServeFlight(neerDosa.visualType, null);
     }
   };
 
@@ -317,7 +327,7 @@ export default function App() {
   return (
     <div className="min-h-screen text-[#2C1810] flex flex-col selection:bg-[#B5562D] selection:text-white pb-28 lg:pb-12 bg-[#FDF8ED]">
       {/* Flight Animation Canvas */}
-      <ServingFlightAnimation flights={flights} />
+      <ServingFlightAnimation flights={flights} onFlightComplete={handleFlightComplete} />
 
       {/* Top Header: Warm Cream Enamel Signboard Header Bar (Fix 1) */}
       <header className="sticky top-0 z-30 bg-[#FAF5EC]/95 backdrop-blur-md border-b border-[#E5DACB] shadow-2xs">
@@ -443,7 +453,7 @@ export default function App() {
                   <div className="flex items-center justify-between px-1">
                     <h3 className="font-udupi-display text-sm font-bold text-[#2C1810] flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-[#B5562D]" />
-                      <span>ರಾಜ ಕಾಂಬೋ • Signature Platters</span>
+                      <span>ಕಾಂಬೋ ತಟ್ಟೆಗಳು • Signature Combos & Platters</span>
                     </h3>
                     <span className="font-mono-chit text-[11px] text-[#7A6456]">
                       Double-width bento combo

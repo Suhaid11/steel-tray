@@ -102,7 +102,7 @@ export const MENU_ITEMS: MenuItem[] = [
     bundleDiscount: 25,
     description: 'Two fluffy Mangalore Buns + fresh butter dollop + hot frothy filter coffee pulled high in stainless steel dabarah.',
     traySection: 'main',
-    visualType: 'combo-raja',
+    visualType: 'combo-buns-kaapi',
     comboOptions: {
       bases: [
         { id: 'base-buns', name: 'Mangalore Buns (2 pcs)', kannadaName: 'ಬನ್ಸ್', price: 70, description: 'Sweet banana pooris' },

@@ -36,7 +36,8 @@ export interface MenuItem {
     | 'hasi-chutney' 
     | 'sambar' 
     | 'beverage'
-    | 'combo-raja';
+    | 'combo-raja'
+    | 'combo-buns-kaapi';
 }
 
 export interface ComboSelection {

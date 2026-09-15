@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { FoodIllustration } from './FoodIllustration';
 
@@ -9,14 +9,25 @@ export interface ActiveFlight {
   startY: number;
   targetX: number;
   targetY: number;
-  onComplete: () => void;
 }
 
 interface ServingFlightAnimationProps {
   flights: ActiveFlight[];
+  onFlightComplete: (flightId: string) => void;
 }
 
-export const ServingFlightAnimation: React.FC<ServingFlightAnimationProps> = ({ flights }) => {
+export const ServingFlightAnimation: React.FC<ServingFlightAnimationProps> = ({
+  flights,
+  onFlightComplete
+}) => {
+  const completedRef = useRef<Set<string>>(new Set());
+
+  const handleComplete = (id: string) => {
+    if (completedRef.current.has(id)) return;
+    completedRef.current.add(id);
+    onFlightComplete(id);
+  };
+
   return (
     <div className="pointer-events-none fixed inset-0 z-50 overflow-hidden">
       <AnimatePresence>
@@ -42,14 +53,19 @@ export const ServingFlightAnimation: React.FC<ServingFlightAnimationProps> = ({ 
                 rotate: [-12, 10, 0],
                 opacity: [0.9, 1, 1]
               }}
-              exit={{ opacity: 0, scale: 0.8 }}
+              exit={{ opacity: 0, scale: 0.6 }}
               transition={{
-                duration: 0.65,
+                duration: 0.55,
                 ease: [0.22, 1, 0.36, 1], // Natural arc easing
                 times: [0, 0.45, 1]
               }}
-              onAnimationComplete={() => {
-                flight.onComplete();
+              onAnimationComplete={(definition) => {
+                // Only trigger completion on the forward animate sequence, never on exit
+                if (typeof definition === 'object') {
+                  handleComplete(flight.id);
+                } else if (!definition || definition === 'animate') {
+                  handleComplete(flight.id);
+                }
               }}
               className="absolute w-16 h-16 filter drop-shadow-2xl"
             >

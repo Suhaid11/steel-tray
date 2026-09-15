@@ -43,7 +43,11 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({
             {/* Banana-leaf green secondary tag instead of red */}
             <span className="inline-flex items-center gap-1.5 bg-[#EDF5EB] text-[#295A24] border border-[#C6DEC2] text-[11px] font-mono-chit font-bold px-2.5 py-0.5 rounded-sm">
               <PixelIcon name="sparkle" size={11} className="text-[#295A24]" />
-              <span>SIGNATURE PLATTER • ರಾಜ ಕಾಂಬೋ</span>
+              <span>
+                {item.id === 'udupi-raja-combo'
+                  ? 'ROYAL THALI • ರಾಜ ಕಾಂಬೋ'
+                  : 'EXPRESS COMBO • ಎಕ್ಸ್‌ಪ್ರೆಸ್ ಕಾಂಬೋ'}
+              </span>
             </span>
 
             {item.bundleDiscount && (
@@ -72,21 +76,43 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({
 
             {/* Micro combo breakdown chips */}
             <div className="flex flex-wrap gap-1.5 pt-1.5 font-mono-chit text-[11px]">
-              <span className="bg-[#FFFFFF] text-[#4A3427] px-2 py-0.5 rounded border border-[#DFCBB5] shadow-2xs">
-                1x Tiffin Base
-              </span>
-              <span className="text-[#9E8B7E] self-center">+</span>
-              <span className="bg-[#FFFFFF] text-[#4A3427] px-2 py-0.5 rounded border border-[#DFCBB5] shadow-2xs">
-                1x Chutney Katori
-              </span>
-              <span className="text-[#9E8B7E] self-center">+</span>
-              <span className="bg-[#FFFFFF] text-[#4A3427] px-2 py-0.5 rounded border border-[#DFCBB5] shadow-2xs">
-                1x Sambar Katori
-              </span>
-              <span className="text-[#9E8B7E] self-center">+</span>
-              <span className="bg-[#FFFFFF] text-[#4A3427] px-2 py-0.5 rounded border border-[#DFCBB5] shadow-2xs">
-                1x Degree Kaapi
-              </span>
+              {item.id === 'buns-kaapi-express' ? (
+                <>
+                  <span className="bg-[#FFFFFF] text-[#4A3427] px-2 py-0.5 rounded border border-[#DFCBB5] shadow-2xs">
+                    2x Mangalore Buns
+                  </span>
+                  <span className="text-[#9E8B7E] self-center">+</span>
+                  <span className="bg-[#FFFFFF] text-[#4A3427] px-2 py-0.5 rounded border border-[#DFCBB5] shadow-2xs">
+                    1x Chutney Katori
+                  </span>
+                  <span className="text-[#9E8B7E] self-center">+</span>
+                  <span className="bg-[#FFFFFF] text-[#4A3427] px-2 py-0.5 rounded border border-[#DFCBB5] shadow-2xs">
+                    1x Gir Cow Benne
+                  </span>
+                  <span className="text-[#9E8B7E] self-center">+</span>
+                  <span className="bg-[#FFFFFF] text-[#4A3427] px-2 py-0.5 rounded border border-[#DFCBB5] shadow-2xs">
+                    1x Degree Kaapi
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="bg-[#FFFFFF] text-[#4A3427] px-2 py-0.5 rounded border border-[#DFCBB5] shadow-2xs">
+                    1x Tiffin Base
+                  </span>
+                  <span className="text-[#9E8B7E] self-center">+</span>
+                  <span className="bg-[#FFFFFF] text-[#4A3427] px-2 py-0.5 rounded border border-[#DFCBB5] shadow-2xs">
+                    1x Chutney Katori
+                  </span>
+                  <span className="text-[#9E8B7E] self-center">+</span>
+                  <span className="bg-[#FFFFFF] text-[#4A3427] px-2 py-0.5 rounded border border-[#DFCBB5] shadow-2xs">
+                    1x Sambar Katori
+                  </span>
+                  <span className="text-[#9E8B7E] self-center">+</span>
+                  <span className="bg-[#FFFFFF] text-[#4A3427] px-2 py-0.5 rounded border border-[#DFCBB5] shadow-2xs">
+                    1x Degree Kaapi
+                  </span>
+                </>
+              )}
             </div>
           </div>
 
